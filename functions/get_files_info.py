@@ -16,4 +16,17 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
     except OSError as e:
         return f'Error: Could not check directory - {e}'
 
-    return f'Success: "{directory}" is within the working directory'
+    #return f'Success: "{directory}" is within the working directory'
+
+    items_info = []
+    try:
+        for item in os.scandir(target_dir):
+            name = item.name
+            is_dir = item.is_dir()
+            size = os.path.getsize(item)
+
+            items_info.append(f"- {name}: file_size={size} bytes, is_dir={is_dir}")
+    except OSError as e:
+        return f'Error: Could not read directory contents - {e}'
+
+    return "\n".join(items_info)
